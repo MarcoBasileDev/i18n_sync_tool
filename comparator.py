@@ -50,3 +50,26 @@ def print_summary_table(file_name, current_keys, all_files_data):
             missing_str = "None (Perfect!)"
 
         print(f"{other_name[:25]:<25} | {len(common):<15} | {missing_str}")
+
+def main():
+    # Look for .json, .js, or .ts files in the current directory
+    extensions = ('.json', '.js', '.ts')
+    files = [f for f in os.listdir('.') if f.endswith(extensions) and f != os.path.basename(__file__)]
+
+    if not files:
+        print("No files found. Make sure you have .json or .js/.ts files in the folder.")
+        return
+
+    # Load data
+    all_files_data = {}
+    for file in files:
+        keys = extract_keys(file)
+        if keys:
+            all_files_data[file] = keys
+
+    # Generate tables for each file
+    for file_name, current_keys in all_files_data.items():
+        print_summary_table(file_name, current_keys, all_files_data)
+
+if __name__ == "__main__":
+    main()
