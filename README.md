@@ -8,3 +8,12 @@ Instead of manually hunting for what's missing, this tool generates a "ready-to-
 
 ---
 
+## 🚀 Key Features
+
+* **Hybrid Parsing:** Reads standard `.json` files and `.js` / `.ts` files using `export const` structures.
+* **Deep Extraction:** Uses advanced Regex to capture multi-line strings and various quoting styles (`'` or `"`).
+* **LLM-Ready Output:** Generates helper files in the `output/` directory formatted specifically for easy AI translation.
+* **Organized Workflow:** Keeps your workspace clean by separating input data from generated results.
+
+---
+
