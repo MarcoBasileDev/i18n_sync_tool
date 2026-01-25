@@ -67,3 +67,9 @@ If your `es.js` is missing keys compared to `en.js`, the generated file in outpu
 WELCOME: 'Welcome',
 LOGOUT_CONFIRM: 'Are you sure you want to leave?',
 ```
+
+---
+
+## ⚠️ Notes on Compatibility
+
+The script is optimized to recognize keys written in **SCREAMING_SNAKE_CASE** (e.g., ACTION_DELETE). It handles values wrapped in either single (`'`) or double (`"`) quotes, including those that span across multiple lines.
