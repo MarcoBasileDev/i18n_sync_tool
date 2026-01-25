@@ -20,3 +20,36 @@ Instead of manually hunting for what's missing, this tool generates a "ready-to-
 ## 🛠 Prerequisites
 - Python 3.x installed on your system.
 - No external libraries required (uses built-in `os`, `re`, and `json` modules).
+
+## 📂 Setup & Project Structure
+
+To use the tool, organize your files as follows:
+
+```text
+/your-project-folder
+├── input/               <-- Place your translation files here (.json, .js, .ts)
+├── output/              <-- The script will create this and put results here
+└── sync_tool.py         <-- Python script
+```
+---
+
+Once you've created a folder named `input` and copied all the translation files you want to compare into it, open the terminal in the project folder and run the script:
+
+```bash
+python sync_tool.py
+```
+
+---
+
+The script will list all files found in the `input` folder. Enter the index number corresponding to your **Master** file (the one that contains the most recent updates).
+
+---
+
+The console will display a summary for every file:
+- **Common keys**: How many keys match the source.
+- **Missing keys**: How many keys are present in the source but absent in the target.
+
+---
+
+Check the output folder for files named missing_in_[target_filename].txt.
+Now you can copy-paste the contents of these files into your LLM and complete the translation.
