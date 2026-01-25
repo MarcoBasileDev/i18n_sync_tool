@@ -8,7 +8,7 @@ Instead of manually hunting for what's missing, this tool generates a "ready-to-
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
 * **Hybrid Parsing:** Reads standard `.json` files and `.js` / `.ts` files using `export const` structures.
 * **Deep Extraction:** Uses advanced Regex to capture multi-line strings and various quoting styles (`'` or `"`).
@@ -17,3 +17,6 @@ Instead of manually hunting for what's missing, this tool generates a "ready-to-
 
 ---
 
+## 🛠 Prerequisites
+- Python 3.x installed on your system.
+- No external libraries required (uses built-in `os`, `re`, and `json` modules).
