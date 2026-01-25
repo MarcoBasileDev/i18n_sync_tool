@@ -2,74 +2,98 @@ import os
 import re
 import json
 
-def extract_keys(file_path):
+def extract_data(file_path):
     """
-    Extracts keys from both JSON files and JS/TS files like.
+    Extracts KEY: VALUE pairs from both JSON and JS/TS files.
     """
-    keys = set()
+    data_map = {}
     with open(file_path, 'r', encoding='utf-8') as f:
         content = f.read()
 
-        # First try as pure JSON
         try:
-            data = json.loads(content)
-            return set(data.keys())
+            # Try parsing as JSON
+            return json.loads(content)
         except json.JSONDecodeError:
-            # If it fails, use regex to catch KEY: 'value' patterns
-            # Looks for words composed of uppercase letters and underscores followed by a colon
-            matches = re.findall(r'([A-Z][A-Z0-9_]+)\s*:', content)
-            return set(matches)
+            # Advanced regex to capture KEY: 'Value' (multiline supported)
+            # Supports both single and double quotes
+            pattern = r'([A-Z][A-Z0-9_]+)\s*:\s*(?P<quote>[\'"])(.*?)(?P=quote)'
+            matches = re.finditer(pattern, content, re.DOTALL)
+            for match in matches:
+                key = match.group(1)
+                value = match.group(3).strip()
+                data_map[key] = value
+            return data_map
 
-def print_summary_table(file_name, current_keys, all_files_data):
+def save_missing_for_llm(source_file_name, source_data, target_file_name, target_keys):
     """
-    Prints the summary table for the current file.
+    Creates a file containing missing keys in the original format
+    to facilitate translation via an LLM.
     """
-    print(f"\n{'='*80}")
-    print(f" REPORT FOR FILE: {file_name} ")
-    print(f"{'='*80}")
-    print(f"Total number of keys found: {len(current_keys)}")
-    print("-" * 80)
+    missing_keys = set(source_data.keys()) - target_keys
+    if not missing_keys:
+        return None
 
-    # Table header
-    header = f"{'Compared with':<25} | {'Common Keys':<15} | {'Missing Keys'}"
-    print(header)
-    print("-" * 80)
+    output_filename = f"missing_in_{target_file_name}.txt"
+    with open(output_filename, 'w', encoding='utf-8') as f:
+        f.write(f"// MISSING KEYS IN {target_file_name} (FROM {source_file_name})\n")
+        f.write("// Copy this content into an LLM and ask it to translate the values.\n\n")
+        for key in sorted(missing_keys):
+            # Preserve the original KEY: 'Value', structure
+            f.write(f"  {key}: '{source_data[key]}',\n")
 
-    for other_name, other_keys in all_files_data.items():
-        if file_name == other_name:
-            continue
-
-        # Calculate sets
-        common = current_keys.intersection(other_keys)
-        missing_in_current = other_keys - current_keys
-
-        missing_str = ", ".join(list(missing_in_current)[:5])  # Show first 5
-        if len(missing_in_current) > 5:
-            missing_str += f" (+ {len(missing_in_current)-5} more)"
-        elif len(missing_in_current) == 0:
-            missing_str = "None (Perfect!)"
-
-        print(f"{other_name[:25]:<25} | {len(common):<15} | {missing_str}")
+    return output_filename
 
 def main():
-    # Look for .json, .js, or .ts files in the current directory
     extensions = ('.json', '.js', '.ts')
-    files = [f for f in os.listdir('.') if f.endswith(extensions) and f != os.path.basename(__file__)]
+    files = [
+        f for f in os.listdir('.')
+        if f.endswith(extensions) and f != os.path.basename(__file__)
+    ]
 
-    if not files:
-        print("No files found. Make sure you have .json or .js/.ts files in the folder.")
+    if len(files) < 2:
+        print("At least 2 files are required to perform a comparison.")
         return
 
-    # Load data
-    all_files_data = {}
-    for file in files:
-        keys = extract_keys(file)
-        if keys:
-            all_files_data[file] = keys
+    # 1. Load data
+    all_data = {file: extract_data(file) for file in files}
 
-    # Generate tables for each file
-    for file_name, current_keys in all_files_data.items():
-        print_summary_table(file_name, current_keys, all_files_data)
+    # 2. Select source file
+    print("\nFiles found:")
+    for index, file in enumerate(files):
+        print(f"[{index}] {file}")
+
+    source_index = int(input("\nEnter the SOURCE file number (e.g. the English one): "))
+    source_file = files[source_index]
+    source_data = all_data[source_file]
+
+    # 3. Analysis and output
+    print(f"\n--- Analysis relative to: {source_file} ---")
+
+    for target_file in files:
+        if target_file == source_file:
+            continue
+
+        target_data = all_data[target_file]
+        target_keys = set(target_data.keys())
+
+        # Quick summary
+        common_keys = set(source_data.keys()).intersection(target_keys)
+        missing_keys = set(source_data.keys()) - target_keys
+
+        print(f"\n> Analyzing {target_file}:")
+        print(f"  - Common keys: {len(common_keys)}")
+        print(f"  - Missing keys: {len(missing_keys)}")
+
+        if missing_keys:
+            output_name = save_missing_for_llm(
+                source_file,
+                source_data,
+                target_file,
+                target_keys
+            )
+            print(f"  [!] Translation helper file created: {output_name}")
+        else:
+            print("  [OK] File already synchronized.")
 
 if __name__ == "__main__":
     main()
