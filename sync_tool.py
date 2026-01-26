@@ -68,6 +68,10 @@ def run_sync(source_file):
     except Exception as e:
         return str(e)
 
+@eel.expose
+def open_output_folder():
+    os.startfile(os.path.abspath(OUTPUT_DIR))
+
 def save_missing_for_llm(source_file_name, source_data, target_file_name, target_keys):
     """
     Creates a file containing missing keys in the original format
