@@ -1,6 +1,10 @@
+import eel
 import os
 import re
 import json
+
+# Initialize Eel -> 'web' folder
+eel.init('web')
 
 INPUT_DIR = "input"
 OUTPUT_DIR = "output"
