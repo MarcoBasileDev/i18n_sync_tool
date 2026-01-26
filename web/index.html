@@ -3,8 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <title>I18N Sync Tool</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="container">
+    <header>
+        <h1>🌍 I18N Sync Tool</h1>
+        <p>Select your master source file to find missing translations.</p>
+    </header>
 
+    <div class="card">
+        <div class="form-group">
+            <label>Source File (Master)</label>
+            <select id="fileSelect">
+                <option value="">Loading files...</option>
+            </select>
+            <button onclick="refreshFiles()" class="btn-secondary">Refresh Files</button>
+        </div>
+
+        <button onclick="startSync()" id="syncBtn" class="btn-primary">Generate Missing Keys</button>
+    </div>
+
+    <div id="results" class="results-area"></div>
+
+    <button onclick="openFolder()" id="folderBtn" class="btn-link" style="display:none;">
+        📂 Open Output Folder
+    </button>
+</div>
+<script src="script.js"></script>
 </body>
 </html>
