@@ -31,6 +31,13 @@ def extract_data(file_path):
                 data_map[key] = value
             return data_map
 
+@eel.expose
+def get_files():
+    """Return a list of files in the INPUT_DIR folder."""
+    os.makedirs(INPUT_DIR, exist_ok=True)
+    extensions = ('.json', '.js', '.ts')
+    return [f for f in os.listdir(INPUT_DIR) if f.endswith(extensions)]
+
 def save_missing_for_llm(source_file_name, source_data, target_file_name, target_keys):
     """
     Creates a file containing missing keys in the original format
