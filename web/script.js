@@ -37,3 +37,6 @@ async function startSync() {
 function openFolder() {
     eel.open_output_folder()();
 }
+
+// Load files on start
+refreshFiles();
