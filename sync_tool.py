@@ -39,6 +39,20 @@ def get_files():
     return [f for f in os.listdir(INPUT_DIR) if f.endswith(extensions)]
 
 @eel.expose
+def upload_file(filename, content):
+    """Receive a file and save it into the input folder"""
+    try:
+        os.makedirs(INPUT_DIR, exist_ok=True)
+        file_path = os.path.join(INPUT_DIR, filename)
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write(content)
+        return True
+    except Exception as e:
+        print(f"Error saving file: {e}")
+        return False
+
+
+@eel.expose
 def run_sync(source_file):
     """Sync logic"""
     try:
