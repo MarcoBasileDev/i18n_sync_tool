@@ -67,6 +67,46 @@ select {
     transition: 0.2s;
 }
 
+.drop-zone {
+    border: 2px dashed #d1d5db;
+    border-radius: 12px;
+    padding: 40px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: #fcfcfd;
+}
+
+.drop-zone:hover, .drop-zone.drag-over {
+    border-color: var(--primary);
+    background: #f5f3ff;
+}
+
+.drop-zone-content p {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #4b5563;
+}
+
+.drop-zone-content span {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.icon-upload {
+    color: #9ca3af;
+    transition: color 0.2s;
+}
+
+.drop-zone:hover .icon-upload {
+    color: var(--primary);
+}
+
+.select-wrapper {
+    display: flex;
+    gap: 10px;
+}
+
 .btn-primary:hover { opacity: 0.9; }
 .btn-secondary:hover { background: #F7F7F7; }
 
