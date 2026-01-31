@@ -1,3 +1,42 @@
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+
+// Handle area click
+dropZone.addEventListener('click', () => fileInput.click());
+
+// Tracking handling
+['dragover', 'dragleave', 'drop'].forEach(evt => {
+    dropZone.addEventListener(evt, e => {
+        e.preventDefault();
+        e.stopPropagation();
+    });
+});
+
+dropZone.addEventListener('dragover', () => dropZone.classList.add('drag-over'));
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+
+dropZone.addEventListener('drop', e => {
+    dropZone.classList.remove('drag-over');
+    handleFiles(e.dataTransfer.files);
+});
+
+fileInput.addEventListener('change', e => handleFiles(e.target.files));
+
+async function handleFiles(files) {
+    for (const file of files) {
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+            const content = e.target.result;
+            const success = await eel.upload_file(file.name, content)();
+            if (success) {
+                console.log(`${file.name} uploaded`);
+                refreshFiles();
+            }
+        };
+        reader.readAsText(file);
+    }
+}
+
 async function refreshFiles() {
     const files = await eel.get_files()();
     const select = document.getElementById('fileSelect');
