@@ -86,5 +86,5 @@ def run_sync(source_file):
 def open_output_folder():
     os.startfile(os.path.abspath(OUTPUT_DIR))
 
-eel.start('index.html', size=(700, 600))
+eel.start('index.html', size=(950, 850))
 
