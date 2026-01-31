@@ -33,3 +33,7 @@ async function startSync() {
     document.getElementById('syncBtn').innerText = "Generate Missing Keys";
     document.getElementById('folderBtn').style.display = "inline-block";
 }
+
+function openFolder() {
+    eel.open_output_folder()();
+}
