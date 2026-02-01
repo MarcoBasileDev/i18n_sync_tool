@@ -14,6 +14,7 @@ Instead of manually hunting for what's missing, this tool generates a "ready-to-
 * **Deep Extraction:** Uses advanced Regex to capture multi-line strings and various quoting styles (`'` or `"`).
 * **LLM-Ready Output:** Generates helper files in the `output/` directory formatted specifically for easy AI translation.
 * **Organized Workflow:** Keeps your workspace clean by separating input data from generated results.
+* **Modern GUI:** A clean, minimal, and intuitive interface built with Eel (HTML/JS/Python).
 
 ---
 
@@ -21,40 +22,36 @@ Instead of manually hunting for what's missing, this tool generates a "ready-to-
 - Python 3.x installed on your system.
 - No external libraries required (uses built-in `os`, `re`, and `json` modules).
 
-## 📂 Setup & Project Structure
+## 📂 Project Structure
 
-To use the tool, organize your files as follows:
+If you are running the script manually or building from source, organize your folder like this:
 
 ```text
 /your-project-folder
+├── web/                 <-- UI assets (HTML, CSS, JS)
 ├── input/               <-- Place your translation files here (.json, .js, .ts)
 ├── output/              <-- The script will create this and put results here
-└── sync_tool.py         <-- Python script
+├── sync_tool.py         <-- Python script
+└── files.ico            <-- App icon
 ```
 ---
 
-Once you've created a folder named `input` and copied all the translation files you want to compare into it, open the terminal in the project folder and run the script:
-
-```bash
+## How to Use
+1. **Run the Application**
+If you are using the source code, install the requirements (`pip install eel`) and run:
+```Bash
 python sync_tool.py
 ```
+_Alternatively, just launch the standalone `.exe` from the official Releases._
 
----
+2. **Upload Files**
+**Drag and drop** your translation files directly into the dashed area of the interface. They will be automatically saved into the `input/` folder.
 
-The script will list all files found in the `input` folder. Enter the index number corresponding to your **Master** file (the one that contains the most recent updates).
+3. **Select Master Source**
+   Select your "Master" file (the most updated one) from the dropdown menu and click "Generate Missing Keys".
 
----
-
-The console will display a summary for every file:
-- **Common keys**: How many keys match the source.
-- **Missing keys**: How many keys are present in the source but absent in the target.
-
----
-
-Check the output folder for files named missing_in_[target_filename].txt.
-Now you can copy-paste the contents of these files into your LLM and complete the translation.
-
---- 
+4. **Copy-Paste Output**
+   Check the `output/` folder. Open the `missing_in_[target].txt` files and paste the content into your favorite LLM.
 
 ## 🔍 Example Output
 If your `es.js` is missing keys compared to `en.js`, the generated file in output/ will look like this:
