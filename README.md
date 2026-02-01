@@ -53,6 +53,12 @@ _Alternatively, just launch the standalone `.exe` from the official Releases._
 4. **Copy-Paste Output**
    Check the `output/` folder. Open the `missing_in_[target].txt` files and paste the content into your favorite LLM.
 
+## Building from Source
+If you want to compile your own standalone executable instead of using the pre-built release, ensure you have `pyinstaller` installed and run the following command:
+```Bash
+python -m PyInstaller --noconsole --onefile --add-data "web;web" --icon=files.ico sync_tool.py
+```
+
 ## 🔍 Example Output
 If your `es.js` is missing keys compared to `en.js`, the generated file in output/ will look like this:
 
